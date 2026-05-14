@@ -237,6 +237,11 @@ def _parse_absolute(text: str, today: date) -> date | None:
 def _parse_impl(text: str, today: date) -> date:
     text = " ".join(text.strip().lower().split())
 
+    # ISO format first — must not be intercepted by any other pattern
+    m = re.fullmatch(r"(\d{4})-(\d{1,2})-(\d{1,2})", text)
+    if m:
+        return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+
     # Simple anchors
     if text in ("today", "now"):
         return today
