@@ -7,9 +7,11 @@ def test_today() -> None:
     today = date(2025, 6, 15)
     assert parse("today", today) == today
 
+
 def test_tommorow() -> None:
     today = date(2025, 6, 15)
     assert parse("tomorrow", today) == date(2025, 6, 16)
+
 
 def test_yesterday() -> None:
     today = date(2025, 6, 15)
@@ -48,4 +50,3 @@ def test_compound_days_before() -> None:
 def test_word_number_offset() -> None:
     today = date(2025, 6, 15)
     assert parse("two weeks from tomorrow", today) == date(2025, 6, 30)
-

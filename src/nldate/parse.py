@@ -119,6 +119,7 @@ _NUM_PAT = r"(?:\d+|" + "|".join(re.escape(w) for w in _NUM_WORDS) + r")"
 _UNIT_PAT = r"(?:years?|months?|weeks?|days?)"
 _TERM_RE = re.compile(rf"({_NUM_PAT})\s+({_UNIT_PAT})")
 
+
 def _to_int(s: str) -> int:
     s = s.strip()
     if s.isdigit():
