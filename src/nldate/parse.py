@@ -191,18 +191,21 @@ def _parse_absolute(text: str, today: date) -> date | None:
     if m:
         return date(int(m.group(3)), int(m.group(1)), int(m.group(2)))
 
-    month_names = "|".join(sorted(_MONTH_MAP, key=len, reverse=True))
+    month_names = "|".join(re.escape(w) + r"\.?" for w in sorted(_MONTH_MAP, key=len, reverse=True))
     ordinal_words = "|".join(sorted(_ORDINAL_TO_INT, key=len, reverse=True))
     day_pat = rf"(?:(\d+)(?:st|nd|rd|th)?|({ordinal_words}))"
 
-    # "Month Day, Year" or "Month Day Year" — e.g. "December 1st, 2025"
+    def _month_num(s: str) -> int:
+        return _MONTH_MAP[s.lower().rstrip(".")]
+
+    # "Month Day, Year" or "Month Day Year" — e.g. "December 1st, 2025" or "Dec. 1, 2025"
     m = re.fullmatch(
         rf"({month_names})\s+{day_pat},?\s*(\d{{4}})?",
         text,
         re.IGNORECASE,
     )
     if m:
-        month = _MONTH_MAP[m.group(1).lower()]
+        month = _month_num(m.group(1))
         day_num = int(m.group(2)) if m.group(2) else _ORDINAL_TO_INT[m.group(3).lower()]
         year = int(m.group(4)) if m.group(4) else today.year
         return date(year, month, day_num)
@@ -215,7 +218,7 @@ def _parse_absolute(text: str, today: date) -> date | None:
     )
     if m:
         day_num = int(m.group(1)) if m.group(1) else _ORDINAL_TO_INT[m.group(2).lower()]
-        month = _MONTH_MAP[m.group(3).lower()]
+        month = _month_num(m.group(3))
         year = int(m.group(4)) if m.group(4) else today.year
         return date(year, month, day_num)
 
@@ -227,7 +230,7 @@ def _parse_absolute(text: str, today: date) -> date | None:
     )
     if m:
         day_num = int(m.group(1)) if m.group(1) else _ORDINAL_TO_INT[m.group(2).lower()]
-        month = _MONTH_MAP[m.group(3).lower()]
+        month = _month_num(m.group(3))
         year = int(m.group(4)) if m.group(4) else today.year
         return date(year, month, day_num)
 
