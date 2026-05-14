@@ -168,7 +168,7 @@ def _last_weekday(ref: date, wd: int) -> date:
 
 
 def _parse_terms(text: str) -> list[tuple[int, str]] | None:
-    parts = re.split(r"\s+and\s+", text.strip())
+    parts = re.split(r"\s*,\s*(?:and\s+)?|\s+and\s+", text.strip())
     result: list[tuple[int, str]] = []
     for part in parts:
         m = _TERM_RE.fullmatch(part.strip())
