@@ -191,7 +191,9 @@ def _parse_absolute(text: str, today: date) -> date | None:
     if m:
         return date(int(m.group(3)), int(m.group(1)), int(m.group(2)))
 
-    month_names = "|".join(re.escape(w) + r"\.?" for w in sorted(_MONTH_MAP, key=len, reverse=True))
+    month_names = "|".join(
+        re.escape(w) + r"\.?" for w in sorted(_MONTH_MAP, key=len, reverse=True)
+    )
     ordinal_words = "|".join(sorted(_ORDINAL_TO_INT, key=len, reverse=True))
     day_pat = rf"(?:(\d+)(?:st|nd|rd|th)?|({ordinal_words}))"
 
