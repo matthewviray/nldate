@@ -181,8 +181,8 @@ def _parse_terms(text: str) -> list[tuple[int, str]] | None:
 def _parse_absolute(text: str, today: date) -> date | None:
     """Parse explicit date strings like 'December 1st, 2025' or '2025-12-01'."""
 
-    # ISO: 2025-12-01
-    m = re.fullmatch(r"(\d{4})-(\d{1,2})-(\d{1,2})", text)
+    # ISO: 2025-12-01 or 2025/12/01
+    m = re.fullmatch(r"(\d{4})[-/](\d{1,2})[-/](\d{1,2})", text)
     if m:
         return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
 
@@ -238,7 +238,7 @@ def _parse_impl(text: str, today: date) -> date:
     text = " ".join(text.strip().lower().split())
 
     # ISO format first — must not be intercepted by any other pattern
-    m = re.fullmatch(r"(\d{4})-(\d{1,2})-(\d{1,2})", text)
+    m = re.fullmatch(r"(\d{4})[-/](\d{1,2})[-/](\d{1,2})", text)
     if m:
         return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
 
